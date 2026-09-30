@@ -40,7 +40,7 @@ export function InvoiceDocument({
 }) {
   const due = Math.max(0, totals.total - paid)
   return (
-    <div className={cn("print-area relative mx-auto w-full max-w-[820px] bg-white p-6 text-[13px] text-slate-800 shadow-sm ring-1 ring-slate-200 sm:p-10", className)}>
+    <div className={cn("print-area relative mx-auto w-full min-w-0 max-w-[820px] bg-white p-6 text-[13px] text-slate-800 shadow-sm ring-1 ring-slate-200 sm:p-10", className)}>
       {cancelled && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <span className="-rotate-12 rounded-md border-4 border-red-500/60 px-6 py-2 text-5xl font-black tracking-widest text-red-500/60">CANCELLED</span>
