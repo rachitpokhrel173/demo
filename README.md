@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Byapar ERP — Stock, Billing & Manufacturing (Client Demo)
 
-## Getting Started
+Interactive demo of a business management system for **ABC Manufacturing & Trading Pvt. Ltd.**:
+parties, sales/POS billing, invoices, purchase, inventory, manufacturing (BOM + production),
+payments, expenses, reports and settings. All amounts are in NPR with Nepali digit grouping (2,45,800) and 13% VAT.
 
-First, run the development server:
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+# or a production build
+npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Demo data is generated on first load and saved in the browser (localStorage).
+Dates shift automatically so "today" always has activity. Use **Settings → Reset Demo Data**
+(or the user menu) to start fresh before a presentation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Suggested demo script (≈10 min)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Dashboard** — today's sales/purchase, receivable NPR 4,85,000, payable NPR 2,35,000, stock value, low-stock alerts, charts.
+2. **Parties → Everest Hardware Store** — overview, ledger (Dr/Cr running balance), payments, sales tabs.
+3. **New Sale** (from the profile) — add Cement + Steel, change qty, discount, VAT; pick *Cash* and enter a partial amount → **Save**.
+4. The **invoice** opens — Tax Invoice with amount in words, Print / PDF / Share.
+5. **Record Payment** on the invoice → remaining due updates; party balance updates.
+6. **Products → Cement** (or Inventory) — stock reduced, stock history shows the sale.
+7. **Parties → Himalayan Suppliers → New Purchase** — add Cement 200 BAG → Save → stock increased.
+8. **Manufacturing → Bill of Materials** — Product A recipe with estimated cost & margin → **Produce**.
+9. Enter quantity → **Complete Production** → Stock Impact shows raw materials decreasing and finished goods increasing.
+10. **Reports** — Sales (daily/weekly/monthly, by product/customer), Purchase, Profit & Loss with VAT summary,
+    Stock, Stock Valuation, Party Outstanding (aging), Customer/Supplier Statement. Every report has filters, search, Export (CSV/Excel) and Print.
 
-## Learn More
+Also try: **Ctrl + K** global search, **Quick Add** menu, notifications bell, Stock Adjustment (physical count), Expenses, Settings → Users / Invoice settings.
 
-To learn more about Next.js, take a look at the following resources:
+## Tech
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · shadcn/ui (Base UI) · Lucide · Recharts · Zustand.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Code map
 
-## Deploy on Vercel
+| Path | What |
+| --- | --- |
+| `src/lib/types.ts` | Domain types (mirror future DB tables) |
+| `src/lib/seed.ts` | Realistic demo data generator |
+| `src/lib/store.ts` | All business actions (sale, purchase, payment, stock, production…) — swap for API calls later |
+| `src/lib/ledger.ts` | Pure calculations: balances, stock, ledgers, FIFO payment allocation |
+| `src/components/shared/*` | Reusable DataTable, filters, pickers, charts, invoice & statement documents, dialogs |
+| `src/components/dialogs/global-dialogs.tsx` | Party, product, payment, stock, expense and BOM forms |
+| `src/components/reports/*` | Report views |
+| `src/app/*` | Pages / routes |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Moving to production
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Replace the Zustand actions in `src/lib/store.ts` with API routes / server actions backed by PostgreSQL (Supabase),
+keeping `ledger.ts` logic on the server. Add authentication and role permissions (Admin / Accountant / Staff),
+Nepali (BS) date support, IRD-compliant invoice numbering per fiscal year, and PDF generation.

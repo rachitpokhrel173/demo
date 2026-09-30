@@ -49,7 +49,7 @@ export default function SettingsPage() {
           </Button>
         }
       />
-      <Tabs defaultValue="business" orientation="vertical" className="gap-5 lg:flex-row">
+      <Tabs defaultValue="business" orientation="vertical" className="flex-col gap-5 lg:flex-row">
         <TabsList variant="line" className="h-fit w-full flex-row justify-start overflow-x-auto rounded-lg border bg-card p-1.5 lg:w-56 lg:flex-col lg:items-stretch">
           {TABS.map((t) => (
             <TabsTrigger key={t.value} value={t.value} className="flex-none justify-start gap-2 px-3 py-2 data-active:bg-primary/10 data-active:text-primary lg:w-full after:hidden">
